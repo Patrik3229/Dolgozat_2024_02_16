@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { CreateStationDto } from './dto/create-station.dto';
 import { UpdateStationDto } from './dto/update-station.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class StationsService {
+  
+  constructor (private readonly db: PrismaService){}
+  
   create(createStationDto: CreateStationDto) {
-    return 'This action adds a new station';
+    return this.db.station.create({
+      data: createStationDto
+    })
   }
 
   findAll() {
-    return `This action returns all stations`;
+    return this.db.station.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} station`;
+    return this.db.station.findFirst({
+      where: {id}
+    })
   }
 
   update(id: number, updateStationDto: UpdateStationDto) {
-    return `This action updates a #${id} station`;
+    return this.db.station.update({
+      data: updateStationDto,
+      where: {id}
+    })
   }
 
   remove(id: number) {
-    return `This action removes a #${id} station`;
+    return this.db.station.delete({
+      where: {id}
+    })
   }
 }
